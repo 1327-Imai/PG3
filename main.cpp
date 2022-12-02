@@ -12,8 +12,8 @@ typedef struct Cell {
 };
 
 
-void create(Cell* currentCell , const char* str);
-void index(Cell* endCell);
+void Create(Cell* currentCell , const char* str);
+void Index(Cell* endCell);
 Cell* GetInsertCellAddress(Cell* endCell , int iterator);
 
 //main関数
@@ -36,11 +36,11 @@ int main() {
 		printf("挿入する文字列を入力してください\n");
 		scanf_s("%s" , str , 16);
 
-		printf("リストを表示します\n");
 		insertCell = GetInsertCellAddress(&head,iterator);
-		create(&head , str);
+		printf("リストを表示します\n");
+		Create(insertCell , str);
 
-		index(&head);
+		Index(&head);
 
 	}
 
@@ -48,7 +48,7 @@ int main() {
 
 }
 
-void create(Cell* currentCell , const char* str) {
+void Create(Cell* currentCell , const char* str) {
 
 	Cell* newCell;
 
@@ -63,18 +63,25 @@ void create(Cell* currentCell , const char* str) {
 
 	if (currentCell->next) {
 		Cell* nextCell = currentCell->next;
-		nextCell = newCell;
+		nextCell->prev = newCell;
 	}
 
 	currentCell->next = newCell;
 
 }
 
-void index(Cell* endCell) {
+void Index(Cell* endCell) {
 
+	int num = 1;
 	while (endCell->next != nullptr) {
 		endCell = endCell->next;
-		printf("%s\n" , endCell->str);
+		printf("%d:" , num);
+		printf("%p" ,endCell->prev);
+		printf("%s" , endCell->str);
+		printf("(%p)" , endCell);
+		printf("%p" , endCell->next);
+		putchar('\n');
+		num++;
 	}
 
 	putchar('\n');
