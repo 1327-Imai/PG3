@@ -2,71 +2,69 @@
 #include <vector>
 #include <list>
 #include <iostream>
+#include <stdlib.h>
+
+//単方向リスト構造体
+typedef struct Cell {
+
+	char str[16];
+	struct Cell* next;
+
+};
+
+
+void create(Cell* head , const char* str);
+void index(Cell* head);
 
 //main関数
 int main() {
 
-	int year = 1970;
+	char str[16];
 
-	std::list<std::string>yamanoteLine{
-		{"Shinagawa"} ,
-		{"Osaki"} ,
-		{"Gotanda"} ,
-		{"Meguro"} ,
-		{"Ebisu"} ,
-		{"Shibuya"} ,
-		{"Harajuku"} ,
-		{"Yoyogi"} ,
-		{"Shinjuku"} ,
-		{"Shin-Okubo"} ,
-		{"Takadanobaba"} ,
-		{"Ikebukuro"} ,
-		{"Otuka"} ,
-		{"Sugamo"} ,
-		{"Komagome"} ,
-		{"Tabata"} ,
-		{"Nipori"} ,
-		{"Uguisudani"} ,
-		{"Ueno"} ,
-		{"Okachimachi"} ,
-		{"Akihabara"} ,
-		{"Kanda"} ,
-		{"Tokyo"} ,
-		{"Yurakucho"} ,
-		{"Shimbashi"} ,
-		{"Hamamatsucho"} ,
-	};
+	//先頭のセルを宣言
+	Cell head;
+	head.next = nullptr;
 
-	printf("year:%d\n" , year);
-	for (std::list<std::string>::iterator itr = yamanoteLine.begin(); itr != yamanoteLine.end(); itr++) {
-		std::cout << *itr << '\n';
+	while (true) {
+
+		scanf_s("%s" , str , 16);
+
+		create(&head , str);
+
+		index(&head);
+
 	}
-	putchar('\n');
-
-
-	year = 2019;
-	for (std::list<std::string>::iterator itr = yamanoteLine.begin(); itr != yamanoteLine.end(); itr++) {
-		if (*itr == "Nipori") {
-			itr = yamanoteLine.insert(itr , "Nishi-Nippori");
-			++itr;
-		}
-	}
-
-	printf("year:%d\n" , year);
-	for (std::list<std::string>::iterator itr = yamanoteLine.begin(); itr != yamanoteLine.end(); itr++) {
-		std::cout << *itr << '\n';
-	}
-	putchar('\n');
-
-	year = 2022;
-	yamanoteLine.push_back("TakanawaGatway");
-
-	printf("year:%d\n" , year);
-	for (std::list<std::string>::iterator itr = yamanoteLine.begin(); itr != yamanoteLine.end(); itr++) {
-		std::cout << *itr << '\n';
-	}
-	putchar('\n');
 
 	return 0;
+
+}
+
+void create(Cell* head , const char* str) {
+
+	Cell* newCell;
+
+	//新規作成するセル分のメモリを確保する
+	newCell = (Cell*)malloc(sizeof(Cell));
+
+	//引数を新規作成したセルの値に入れる
+	strcpy_s(newCell->str ,16 , str);
+	newCell->next = nullptr;
+
+	while (head->next != nullptr) {
+		head = head->next;
+	}
+
+	head->next = newCell;
+
+}
+
+void index(Cell* head) {
+
+	while (head->next != nullptr) {
+		head = head->next;
+		printf("%s\n" , head->str);
+	}
+
+	putchar('\n');
 
 }
