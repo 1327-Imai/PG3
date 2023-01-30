@@ -20,29 +20,29 @@ int CreateRandomNum(float min , float max);
 void DisplayTimerMessage(int s);
 
 //指定した秒数待つ関数
-void SetTimeOut(PVoidFunc pVoid ,PIntFunc pInt, int s);
+void SetTimeOut(PVoidFunc pVoid , PIntFunc pInt , int s);
 
 //正解か調べる関数
-void CheckCorrectAnswer(int inputNum , int randomNum);
+void CheckCorrectAnswer(int inputNum , int dice);
 
 //main関数
 int main() {
 
 	//変数の宣言と初期化
-	int inputNum = 0;
-	int randomNum = 0;
 	const int time = 3;
 
 	PVoidFunc pVoid = DisplayTimerMessage;
 	PIntFunc pInt = ConvertMilliSec;
 
-	Question(inputNum);
+	std::function<void(int)> ChohanGame = [=](int time) {
+		int inputNum;
+		Question(inputNum);
+		int dice = CreateRandomNum(1 , 6);
+		SetTimeOut(pVoid , pInt , time);
+		CheckCorrectAnswer(inputNum , dice);
+	};
 
-	randomNum = CreateRandomNum(1,100);
-
-	SetTimeOut(pVoid , pInt , time);
-
-	CheckCorrectAnswer(inputNum , randomNum);
+	ChohanGame(time);
 
 	return 0;
 
@@ -95,7 +95,7 @@ void DisplayTimerMessage(int s) {
 }
 
 //指定した秒数待つ関数
-void SetTimeOut(PVoidFunc pVoid, PIntFunc pInt ,int s) {
+void SetTimeOut(PVoidFunc pVoid , PIntFunc pInt , int s) {
 
 	pVoid(s);
 
@@ -103,11 +103,11 @@ void SetTimeOut(PVoidFunc pVoid, PIntFunc pInt ,int s) {
 }
 
 //正解か調べる関数
-void CheckCorrectAnswer(int inputNum , int randomNum) {
+void CheckCorrectAnswer(int inputNum , int dice) {
 
 	int answer = 0;
 
-	if (randomNum % 2 == 1) {
+	if (dice % 2 == 1) {
 		answer = 1;
 	}
 	else {
@@ -116,11 +116,10 @@ void CheckCorrectAnswer(int inputNum , int randomNum) {
 
 	if (inputNum == answer) {
 		printf("正解です、おめでとうございます。\n");
-		printf("生成された数字:%d\n" , randomNum);
 	}
 	else {
 		printf("残念、不正解でした。\n");
-		printf("生成された数字:%d\n" , randomNum);
 	}
+	printf("生成された数字:%d\n" , dice);
 
 }
