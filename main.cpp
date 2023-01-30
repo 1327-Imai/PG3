@@ -8,7 +8,7 @@ typedef int (*PIntFunc)(int);
 
 //関数のプロトタイプ宣言
 //偶数か奇数かを問う関数
-void Question(int& inputNum);
+void Question(int& ans);
 
 //秒単位をミリ秒単位として扱うようにする関数
 int ConvertMilliSec(int time);
@@ -20,10 +20,10 @@ int CreateRandomNum(float min , float max);
 void DisplayTimerMessage(int s);
 
 //指定した秒数待つ関数
-void SetTimeOut(PVoidFunc pVoid , PIntFunc pInt , int s);
+void SetTimeOut(PVoidFunc pVoid , int s);
 
 //正解か調べる関数
-void CheckCorrectAnswer(int inputNum , int dice);
+void CheckCorrectAnswer(int ans , int dice);
 
 //main関数
 int main() {
@@ -31,15 +31,25 @@ int main() {
 	//変数の宣言と初期化
 	const int time = 3;
 
-	PVoidFunc pVoid = DisplayTimerMessage;
-	PIntFunc pInt = ConvertMilliSec;
+	//ラムダ式
+	std::function<void(int)> ChohanGame = [](int time) {
+		//関数ポインタ
+		PVoidFunc pVoid = DisplayTimerMessage;
 
-	std::function<void(int)> ChohanGame = [=](int time) {
-		int inputNum;
-		Question(inputNum);
+		//解答記録用変数
+		int ans;
+
+		//出題
+		Question(ans);
+		
+		//賽の目の決定
 		int dice = CreateRandomNum(1 , 6);
-		SetTimeOut(pVoid , pInt , time);
-		CheckCorrectAnswer(inputNum , dice);
+		
+		//答え合わせまでのディレイ
+		SetTimeOut(pVoid , time);
+		
+		//答え合わせ
+		CheckCorrectAnswer(ans , dice);
 	};
 
 	ChohanGame(time);
@@ -50,7 +60,7 @@ int main() {
 
 //関数の定義
 //偶数か奇数かを問う関数
-void Question(int& inputNum) {
+void Question(int& ans) {
 
 	while (true) {
 
@@ -58,9 +68,9 @@ void Question(int& inputNum) {
 		printf("奇数:1\n");
 		printf("偶数:2\n");
 
-		scanf_s("%d" , &inputNum);
+		scanf_s("%d" , &ans);
 
-		if (inputNum == 1 || inputNum == 2) {
+		if (ans == 1 || ans == 2) {
 			break;
 		}
 		else {
@@ -95,15 +105,15 @@ void DisplayTimerMessage(int s) {
 }
 
 //指定した秒数待つ関数
-void SetTimeOut(PVoidFunc pVoid , PIntFunc pInt , int s) {
+void SetTimeOut(PVoidFunc pVoid , int s) {
 
 	pVoid(s);
 
-	Sleep(pInt(s));
+	Sleep(ConvertMilliSec(s));
 }
 
 //正解か調べる関数
-void CheckCorrectAnswer(int inputNum , int dice) {
+void CheckCorrectAnswer(int ans , int dice) {
 
 	int answer = 0;
 
@@ -114,7 +124,7 @@ void CheckCorrectAnswer(int inputNum , int dice) {
 		answer = 2;
 	}
 
-	if (inputNum == answer) {
+	if (ans == answer) {
 		printf("正解です、おめでとうございます。\n");
 	}
 	else {
