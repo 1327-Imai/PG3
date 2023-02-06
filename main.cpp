@@ -3,32 +3,12 @@
 
 int main() {
 
-	const int enemyNum = 3;
-	Enemy* enemy[enemyNum];
+	Enemy* enemy = new Enemy;
 
 	while (true) {
-		enemy[0]->SetIsAlive(true);
+		enemy->Update();
 
-		for (int i = 0; i < enemyNum; i++) {
-			enemy[i] = new Enemy;
-		}
-
-		for (int i = 0; i < enemyNum; i++) {
-
-			enemy[i]->Update();
-
-		}
-
-		for (int i = 0; i < enemyNum; i++) {
-
-			enemy[i]->Draw();
-
-		}
-
-		for (int i = 0; i < enemyNum; i++) {
-			delete enemy[i];
-		}
-
+		enemy->Draw();
 	}
 
 	return 0;

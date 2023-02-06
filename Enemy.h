@@ -1,4 +1,11 @@
 #pragma once
+
+enum class EnemyState {
+	MELEE,
+	SHOT,
+	LEAVE
+};
+
 class Enemy {
 public:
 
@@ -12,13 +19,15 @@ public:
 
 	void Draw();
 
-	void SetIsAlive(int isAlive);
+	void Melee();
+
+	void Shot();
+
+	void Leave();
 
 private:
-	static int isAlive_;
-	static int sequense_;
+	EnemyState phase_;
 
-	int key_;
-	int id_;
+	static void (Enemy::* spFuncTable[])();
 };
 

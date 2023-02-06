@@ -1,12 +1,13 @@
 #include "Enemy.h"
 #include <stdio.h>
 
-int Enemy::isAlive_ = true;
-int Enemy::sequense_ = 0;
+void (Enemy::* Enemy::spFuncTable[])() = {
+	&Enemy::Melee ,
+	&Enemy::Shot ,
+	&Enemy::Leave
+};
 
 Enemy::Enemy() {
-	sequense_++;
-
 	Initialize();
 }
 
@@ -15,34 +16,41 @@ Enemy::~Enemy() {
 }
 
 void Enemy::Initialize() {
-	id_ = sequense_;
+	phase_ = EnemyState::MELEE;
 }
+
 
 void Enemy::Update() {
 
-	printf("%d”Ô–Ú‚Ì“G‚ğ“|‚µ‚Ü‚·‚©H\n" , id_);
-	printf("“|‚·:1\n");
-	printf("“|‚³‚È‚¢:0\n");
-
-	scanf_s("%d" , &key_);
-
-	if (key_ == 1) {
-		isAlive_ = false;
-	}
+	(this->*spFuncTable[static_cast<size_t>(phase_)])();
 
 }
 
 void Enemy::Draw() {
 
-	if (isAlive_==true) {
-		printf("¶‚«‚Ä‚é\n");
-	}
-	else {
-		printf("€‚ñ‚Å‚é\n");
-	}
 
 }
 
-void Enemy::SetIsAlive(int isAlive) {
-	isAlive_ = isAlive;
+void Enemy::Melee() {
+
+	printf("‹ßÚUŒ‚‚ğ‚µ‚Ü‚µ‚½\n");
+
+	phase_ = EnemyState::SHOT;
+
+}
+
+void Enemy::Shot() {
+
+	printf("ËŒ‚UŒ‚‚ğ‚µ‚Ü‚µ‚½\n");
+
+	phase_ = EnemyState::LEAVE;
+
+}
+
+void Enemy::Leave() {
+
+	printf("—£’E‚µ‚Ü‚µ‚½\n");
+
+	phase_ = EnemyState::MELEE;
+
 }
