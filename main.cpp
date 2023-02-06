@@ -1,15 +1,17 @@
 #include <stdio.h>
-#include "Enemy.h"
+#include "Circle.h"
+#include "Ractangle.h"
 
 int main() {
 
-	Enemy* enemy = new Enemy;
+	Circle* circle = new Circle(5.0f);
+	Ractangle* ractangle = new Ractangle(2.0f , 3.0f);
 
-	while (true) {
-		enemy->Update();
+	circle->Draw();
+	ractangle->Draw();
 
-		enemy->Draw();
-	}
+	delete circle;
+	delete ractangle;
 
 	return 0;
 }
